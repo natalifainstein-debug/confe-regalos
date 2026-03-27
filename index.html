@@ -148,8 +148,9 @@
 </div>
 <div class="success-card" id="success">
   <div class="success-icon">🎁</div>
-  <h2>¡Gracias por apadrinar!</h2>
-  <p>Tu registro fue enviado. Contacta a Natali para coordinar la entrega del regalo.</p>
+  <h2 id="success-titulo">¡Gracias por apadrinar!</h2>
+<div id="success-ninos" style="margin: 16px 0; text-align: left;"></div>
+<p>Tu registro fue enviado.
 </div>
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWHIg9oDPPyCyfk-mxjsmQR9ms3IJVqMa13O3QeOnA-PzMljluisD_40SuNa_ekQGDzg/exec';
@@ -354,7 +355,13 @@ async function confirmar() {
     formData.append('mensaje', mensaje);
     await fetch('/', { method: 'POST', body: formData });
     document.getElementById('main-form').style.display = 'none';
-    document.getElementById('success').classList.add('visible');
+document.getElementById('success-titulo').textContent = '¡Gracias ' + nombre + '!';
+const lista = ninosSeleccionados.map(n => {
+  const info = ninos.find(x => x.nombre === n);
+  return '<div style="padding:10px 0; border-bottom:1px solid #c8e6c9;"><strong>' + n + '</strong><br/><span style="font-size:0.85rem;color:#4a7a4a;">🎁 ' + (info ? info.juguetes : '') + '</span></div>';
+}).join('');
+document.getElementById('success-ninos').innerHTML = lista;
+document.getElementById('success').classList.add('visible');
   } catch(err) {
     alert('Error al guardar. Intenta de nuevo.');
     btn.disabled = false;
