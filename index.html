@@ -273,7 +273,9 @@ const INICIALES = [
   "Rodriguez Bastian","Rodriguez Elias","Ruiz Israel","Sandoval Natalia",
   "Silvia Leonardo","Solis Emma","Urbina Amairani","Pérez Regina"
 ];
-
+function initials(nombre) {
+  return nombre.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
+}
 let apadrinados = [];
 
 function cargarApadrinados() {
