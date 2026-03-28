@@ -301,7 +301,7 @@ function renderLista() {
   const buscar = document.getElementById('f-buscar').value.toLowerCase();
   const lista = document.getElementById('lista');
   lista.innerHTML = '';
- const ninosOrdenados = ninos.map((n,i) => ({...n,idx:i})).sort((a,b) => apadrinados.includes(a.nombre) - apadrinados.includes(b.nombre));
+ const ninosOrdenados = ninos.map((n,i) => ({...n,idx:i})).sort((a,b) => apadrinados.includes(a.nombre) - apadrinados.includes(b.nombre)); ninosOrdenados.forEach((n) => { const i = n.idx;
 ninosOrdenados.forEach((n) => { const i = n.idx;
 ninosOrdenados.forEach((n) => { const i = n.idx;
     if (filtroGenero !== 'todos' && n.genero !== filtroGenero) return;
