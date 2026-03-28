@@ -302,8 +302,7 @@ function renderLista() {
   const lista = document.getElementById('lista');
   lista.innerHTML = '';
  const ninosOrdenados = ninos.map((n,i) => ({...n,idx:i})).sort((a,b) => apadrinados.includes(a.nombre) - apadrinados.includes(b.nombre)); ninosOrdenados.forEach((n) => { const i = n.idx;
-ninosOrdenados.forEach((n) => { const i = n.idx;
-ninosOrdenados.forEach((n) => { const i = n.idx;
+
     if (filtroGenero !== 'todos' && n.genero !== filtroGenero) return;
     if (buscar && !n.nombre.toLowerCase().includes(buscar)) return;
     const sel = seleccionados.includes(i);
@@ -323,7 +322,7 @@ ninosOrdenados.forEach((n) => { const i = n.idx;
     `lista.appendChild(div);
   });
     lista.appendChild(div);}
-  });
+
 }
 
 function renderTags() {
