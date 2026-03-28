@@ -269,13 +269,11 @@ const INICIALES = [
   "Garduño Nicolas","Gomez Mateo","González Ariadna","Hernandez Abigail",
   "Hernandez Grecia","Hernandez Mia","Lopez Adrian","Lopez Hector Enrique",
   "Mendoza Evan","Mendoza Fernando","Ocampo Cielo","Ortiz Cristopher",
-  "Oseguera Arturo","Pacheco Julieta","Perez Mathias","Puebla Angel",
+  "Oseguera Arturo","Pacheco Julieta","Pérez Regina","Perez Mathias","Puebla Angel",
   "Rodriguez Bastian","Rodriguez Elias","Ruiz Israel","Sandoval Natalia",
   "Silvia Leonardo","Solis Emma","Urbina Amairani"
 ];
-function initials(nombre) {
-  return nombre.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
-}
+
 let apadrinados = [];
 
 function cargarApadrinados() {
@@ -418,7 +416,7 @@ async function confirmar() {
   }
 }
 
-window.onload = cargarApadrinados;
+cargarApadrinados();
 </script>
 </body>
 </html>
