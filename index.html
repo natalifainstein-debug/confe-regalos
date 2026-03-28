@@ -272,8 +272,9 @@ const INICIALES = [
   "Oseguera Arturo","Pacheco Julieta","Perez Mathias","Puebla Angel",
   "Rodriguez Bastian","Rodriguez Elias","Ruiz Israel","Sandoval Natalia",
   "Silvia Leonardo","Solis Emma","Urbina Amairani"
-]
-  document.getElementById('loading-msg').style.display = 'none';
+let apadrinados = [];
+function cargarApadrinados() {
+  apadrinados = [...INICIALES];
   document.getElementById('btn-confirmar').disabled = false;
   renderLista();
   const callbackName = 'cb_' + Date.now();
