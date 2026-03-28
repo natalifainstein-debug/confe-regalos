@@ -79,12 +79,10 @@
   </style>
 </head>
 <body>
-
 <nav>
   <div class="nav-brand">CONFE <span>·</span> Regalos</div>
   <span class="nav-tab">Apadrinar</span>
 </nav>
-
 <form name="apadrinamiento" netlify netlify-honeypot="bot-field" hidden>
   <input type="text" name="nombre"/>
   <input type="text" name="telefono"/>
@@ -93,13 +91,11 @@
   <input type="text" name="ninos"/>
   <textarea name="mensaje"></textarea>
 </form>
-
 <div class="hero">
   <span class="hero-tag">CONFE 2026</span>
   <h1>Regala una sonrisa<br/><em>este año</em></h1>
   <p>Elige al niño o niña que quieres apadrinar y coordina el regalo con Natali. Cada presente hace la diferencia.</p>
 </div>
-
 <div class="main" id="main-form">
   <div class="card">
     <div class="card-title"><span class="step">1</span> Tus datos</div>
@@ -116,7 +112,6 @@
       <input id="f-email" type="email" placeholder="tucorreo@email.com"/>
     </div>
   </div>
-
   <div class="card">
     <div class="card-title"><span class="step">2</span> ¿Cómo quieres participar?</div>
     <div class="radio-opts">
@@ -136,7 +131,6 @@
       </label>
     </div>
   </div>
-
   <div class="card">
     <div class="card-title"><span class="step">3</span> Elige al niño o niña</div>
     <div class="search-wrap">
@@ -153,7 +147,6 @@
     <div class="tags-wrap" id="tags"></div>
     <div class="counter" id="counter">0 niños seleccionados</div>
   </div>
-
   <div class="card">
     <div class="card-title"><span class="step">4</span> Mensaje para el ahijado/ahijada (opcional)</div>
     <div class="field">
@@ -161,17 +154,14 @@
       <textarea id="f-comentarios" rows="3" style="resize:vertical" placeholder="Escribe algo bonito..."></textarea>
     </div>
   </div>
-
   <button class="btn-primary" id="btn-confirmar" onclick="confirmar()" disabled>Confirmar apadrinamiento →</button>
 </div>
-
 <div class="success-card" id="success">
   <div class="success-icon">🎁</div>
   <h2 id="success-titulo">¡Gracias por apadrinar!</h2>
   <div id="success-ninos" style="margin: 16px 0; text-align: left;"></div>
   <p>Tu registro fue enviado. Contacta a Natali para coordinar la entrega del regalo.</p>
 </div>
-
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWHIg9oDPPyCyfk-mxjsmQR9ms3IJVqMa13O3QeOnA-PzMljluisD_40SuNa_ekQGDzg/exec';
 
@@ -260,23 +250,26 @@ const ninos = [
 
 let seleccionados = [];
 let filtroGenero = 'todos';
+let apadrinados = [];
+
 const INICIALES = [
   "Acosta Anel","Alejo Karime","Alvarado Elias","Ayvar Romina",
   "Barco Gabriel","Barron Jireh","Barron Sofia","Biasana Bruno",
-  "Castro Edith","Castro Melisa","Cosmes Elieen","Covarrubias Nina",
+  "Castro Edith","Castro Melisa","Castro Sebastian","Cosmes Elieen","Covarrubias Nina",
   "Cruz Barbara","Cuevas Aurora","Dominguez Luciana","Escalona Einar",
   "Escobar Sebastian","Garcia Camila","Garcia Monserrat","Garcia Natali",
-  "Garduño Nicolas","Gomez Mateo","González Ariadna","Hernandez Abigail",
-  "Hernandez Grecia","Hernandez Mia","Lopez Adrian","Lopez Hector Enrique",
-  "Mendoza Evan","Mendoza Fernando","Ocampo Cielo","Ortiz Cristopher",
-  "Oseguera Arturo","Pacheco Julieta","Pérez Regina","Perez Mathias","Puebla Angel",
-  "Rodriguez Bastian","Rodriguez Elias","Ruiz Israel","Sandoval Natalia",
- "Silvia Leonardo","Solis Emma","Urbina Amairani","Pérez Regina","Romero Said","Castro Sebastian","Gonzalez Elian","Yerena Eduardo"
+  "Garduño Nicolas","Gomez Mateo","Gonzalez Elian","González Ariadna",
+  "Hernandez Abigail","Hernandez Grecia","Hernandez Mia","Lopez Adrian",
+  "Lopez Hector Enrique","Mendoza Evan","Mendoza Fernando","Ocampo Cielo",
+  "Ortiz Cristopher","Oseguera Arturo","Pacheco Julieta","Perez Mathias",
+  "Pérez Regina","Puebla Angel","Rodriguez Bastian","Rodriguez Elias",
+  "Romero Said","Ruiz Israel","Sandoval Natalia","Silvia Leonardo",
+  "Solis Emma","Urbina Amairani","Yerena Eduardo"
 ];
+
 function initials(nombre) {
   return nombre.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
 }
-let apadrinados = [];
 
 function cargarApadrinados() {
   apadrinados = [...INICIALES];
@@ -289,19 +282,20 @@ function cargarApadrinados() {
     const nuevos = fromSheet.filter(n => !apadrinados.includes(n));
     if (nuevos.length > 0) { apadrinados = [...apadrinados, ...nuevos]; renderLista(); }
     delete window[callbackName];
-    document.getElementById('jsonp-script').remove();
+    try { document.getElementById('jsonp-script').remove(); } catch(e) {}
   };
   const script = document.createElement('script');
   script.id = 'jsonp-script';
   script.src = SCRIPT_URL + '?callback=' + callbackName + '&t=' + Date.now();
   document.body.appendChild(script);
+  setTimeout(() => { try { document.getElementById('jsonp-script').remove(); } catch(e) {} }, 3000);
 }
 
 function renderLista() {
   const buscar = document.getElementById('f-buscar').value.toLowerCase();
   const lista = document.getElementById('lista');
   lista.innerHTML = '';
- ninos.forEach((n, i) => {
+  ninos.forEach((n, i) => {
     if (filtroGenero !== 'todos' && n.genero !== filtroGenero) return;
     if (buscar && !n.nombre.toLowerCase().includes(buscar)) return;
     const sel = seleccionados.includes(i);
@@ -318,10 +312,9 @@ function renderLista() {
         <div class="nino-toys">${n.juguetes}</div>
       </div>
       ${ap ? '<span class="nino-badge">✓ Apadrinado</span>' : ''}
-   lista.appendChild(div);
+    `;
+    lista.appendChild(div);
   });
-  
-
 }
 
 function renderTags() {
@@ -345,6 +338,7 @@ function toggleNino(i) {
   else seleccionados.splice(idx, 1);
   renderLista();
   renderTags();
+  document.getElementById('btn-confirmar').disabled = seleccionados.length === 0 || !document.querySelector('input[name=metodo]:checked');
 }
 
 function filtrar() { renderLista(); }
@@ -363,12 +357,12 @@ function selectRadio(label) {
 
 async function confirmar() {
   const nombre = document.getElementById('f-nombre').value.trim();
+  const telefono = document.getElementById('f-telefono').value.trim();
+  const email = document.getElementById('f-email').value.trim();
   const metodoEl = document.querySelector('input[name=metodo]:checked');
   const mensaje = document.getElementById('f-comentarios').value.trim();
 
   if (!nombre) { alert('Por favor escribe tu nombre.'); return; }
-  const telefono = document.getElementById('f-telefono').value.trim();
-  const email = document.getElementById('f-email').value.trim();
   if (!telefono) { alert('Por favor escribe tu número de contacto.'); return; }
   if (!email) { alert('Por favor escribe tu correo electrónico.'); return; }
   if (!metodoEl) { alert('Por favor elige cómo quieres participar.'); return; }
@@ -382,15 +376,13 @@ async function confirmar() {
   btn.textContent = 'Enviando...';
 
   try {
-    // Guardar en Google Sheets
     await fetch(SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ padrino: nombre, metodo, ninos: ninosSeleccionados, mensaje })
+      body: JSON.stringify({ padrino: nombre, telefono, email, metodo, ninos: ninosSeleccionados, mensaje })
     });
 
-    // Guardar en Netlify Forms
     const formData = new FormData();
     formData.append('form-name', 'apadrinamiento');
     formData.append('nombre', nombre);
@@ -405,10 +397,7 @@ async function confirmar() {
     document.getElementById('success-titulo').textContent = '¡Gracias ' + nombre + '!';
     const lista = ninosSeleccionados.map(n => {
       const info = ninos.find(x => x.nombre === n);
-      return `<div style="padding:10px 0; border-bottom:1px solid #c8e6c9;">
-        <strong>${n}</strong><br/>
-        <span style="font-size:0.85rem;color:#4a7a4a;">🎁 ${info ? info.juguetes : ''}</span>
-      </div>`;
+      return '<div style="padding:10px 0; border-bottom:1px solid #c8e6c9;"><strong>' + n + '</strong><br/><span style="font-size:0.85rem;color:#4a7a4a;">🎁 ' + (info ? info.juguetes : '') + '</span></div>';
     }).join('');
     document.getElementById('success-ninos').innerHTML = lista;
     document.getElementById('success').classList.add('visible');
@@ -419,7 +408,7 @@ async function confirmar() {
   }
 }
 
-cargarApadrinados();
+window.onload = cargarApadrinados;
 </script>
 </body>
 </html>
