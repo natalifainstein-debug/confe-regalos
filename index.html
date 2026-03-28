@@ -289,6 +289,7 @@ function cargarApadrinados() {
   script.id = 'jsonp-script';
   script.src = SCRIPT_URL + '?callback=' + callbackName + '&t=' + Date.now();
   document.body.appendChild(script);
+  setTimeout(() => { try { document.getElementById('jsonp-script').remove(); } catch(e) {} }, 3000);
 }
 
 function renderLista() {
