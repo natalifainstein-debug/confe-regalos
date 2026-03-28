@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apadrina un Regalo · CONFE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f3ee; --card: #ffffff; --dark: #1a1208;
+      --accent: #c84b2f; --accent2: #e8a020; --muted: #7a6e62;
+      --border: #e2dbd2; --girl: #e8c4b8; --boy: #b8cfe8;
+      --girl-text: #8b3a2a; --boy-text: #2a4f8b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--dark); min-height: 100vh; }
+    nav { background: var(--dark); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .nav-brand { font-family: 'Fraunces', serif; color: #fff; font-size: 1.1rem; }
+    .nav-brand span { color: var(--accent2); }
+    .nav-tab { padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; text-decoration: none; background: rgba(255,255,255,0.12); color: #fff; }
+    .hero { text-align: center; padding: 56px 24px 40px; max-width: 560px; margin: 0 auto; }
+    .hero-tag { display: inline-block; background: var(--accent); color: #fff; font-size: 0.75rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 20px; }
+    .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5vw, 2.8rem); line-height: 1.15; font-weight: 600; margin-bottom: 14px; }
+    .hero h1 em { color: var(--accent); font-style: italic; }
+    .hero p { color: var(--muted); font-size: 1rem; line-height: 1.6; }
+    .main { max-width: 680px; margin: 0 auto; padding: 0 16px 60px; display: flex; flex-direction: column; gap: 16px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+    .card-title { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .step { width: 28px; height: 28px; background: var(--dark); color: #fff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; flex-shrink: 0; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 0.8rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+    .field input, .field textarea { border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 0.95rem; font-family: inherit; background: var(--bg); color: var(--dark); transition: border-color 0.2s; width: 100%; }
+    .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
+    .radio-opts { display: flex; flex-direction: column; gap: 10px; }
+    .radio-opt { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1.5px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+    .radio-opt:hover { border-color: var(--accent); background: #fdf5f3; }
+    .radio-opt.selected { border-color: var(--accent); background: #fdf5f3; }
+    .radio-opt input[type=radio] { margin-top: 2px; accent-color: var(--accent); }
+    .radio-opt-title { font-weight: 500; font-size: 0.95rem; }
+    .radio-opt-desc { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+    .search-wrap { position: relative; margin-bottom: 12px; }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 1rem; }
+    .search-wrap input { width: 100%; padding: 10px 14px 10px 36px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.9rem; font-family: inherit; background: var(--bg); }
+    .search-wrap input:focus { outline: none; border-color: var(--accent); }
+    .filter-row { display: flex; gap: 8px; margin-bottom: 14px; }
+    .filter-btn { padding: 6px 16px; border-radius: 20px; border: 1.5px solid var(--border); background: transparent; font-size: 0.82rem; font-family: inherit; cursor: pointer; font-weight: 500; color: var(--muted); transition: all 0.2s; }
+    .filter-btn.active, .filter-btn:hover { background: var(--dark); border-color: var(--dark); color: #fff; }
+    .nino-list-wrap { display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; padding-right: 4px; }
+    .nino-list-wrap::-webkit-scrollbar { width: 4px; }
+    .nino-list-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .nino-item { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1.5px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.15s; user-select: none; }
+    .nino-item:hover:not(.apadrinado) { border-color: var(--accent); background: #fdf9f8; }
+    .nino-item.selected { border-color: var(--accent); background: #fdf5f3; }
+    .nino-item.apadrinado { opacity: 0.4; pointer-events: none; background: #f5f5f5; }
+    .nino-item input[type=checkbox] { accent-color: var(--accent); width: 16px; height: 16px; flex-shrink: 0; }
+    .nino-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+    .av-girl { background: var(--girl); color: var(--girl-text); }
+    .av-boy { background: var(--boy); color: var(--boy-text); }
+    .nino-info { flex: 1; min-width: 0; }
+    .nino-name { font-weight: 500; font-size: 0.9rem; }
+    .nino-meta { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
+    .nino-toys { font-size: 0.78rem; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nino-badge { font-size: 0.7rem; background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 10px; font-weight: 600; flex-shrink: 0; }
+    .tags-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .tag { background: var(--dark); color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
+    .tag-remove { cursor: pointer; opacity: 0.6; font-size: 1rem; line-height: 1; }
+    .tag-remove:hover { opacity: 1; }
+    .counter { font-size: 0.82rem; color: var(--muted); margin-top: 8px; }
+    .btn-primary { width: 100%; padding: 16px; background: var(--dark); color: #fff; border: none; border-radius: 12px; font-size: 1rem; font-family: 'Fraunces', serif; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-primary:hover:not(:disabled) { background: var(--accent); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .loading-bar { text-align: center; padding: 20px; color: var(--muted); font-size: 0.9rem; }
+    .success-card { background: #f0faf0; border: 1.5px solid #a5d6a7; border-radius: 16px; padding: 32px 24px; text-align: center; display: none; max-width: 680px; margin: 0 auto 60px; }
+    .success-card.visible { display: block; }
+    .success-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .success-card h2 { font-family: 'Fraunces', serif; font-size: 1.5rem; margin-bottom: 8px; color: #2e7d32; }
+    .success-card p { color: #4a7a4a; font-size: 0.95rem; line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">CONFE <span>·</span> Regalos</div>
+  <span class="nav-tab">Apadrinar</span>
+</nav>
+
+<form name="apadrinamiento" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="nombre"/>
+  <input type="text" name="telefono"/>
+  <input type="email" name="email"/>
+  <input type="text" name="metodo"/>
+  <input type="text" name="ninos"/>
+  <textarea name="mensaje"></textarea>
+</form>
+
+<div class="hero">
+  <span class="hero-tag">CONFE 2026</span>
+  <h1>Regala una sonrisa<br/><em>este año</em></h1>
+  <p>Elige al niño o niña que quieres apadrinar y coordina el regalo con Natali. Cada presente hace la diferencia.</p>
+</div>
+
+<div class="main" id="main-form">
+  <div class="card">
+    <div class="card-title"><span class="step">1</span> Tus datos</div>
+    <div class="field" style="margin-bottom:12px">
+      <label for="f-nombre">Nombre completo *</label>
+      <input id="f-nombre" type="text" placeholder="Nombre completo"/>
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label for="f-telefono">Número de contacto *</label>
+      <input id="f-telefono" type="tel" placeholder="Ej. 55 1234 5678"/>
+    </div>
+    <div class="field">
+      <label for="f-email">Correo electrónico *</label>
+      <input id="f-email" type="email" placeholder="tucorreo@email.com"/>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="step">2</span> ¿Cómo quieres participar?</div>
+    <div class="radio-opts">
+      <label class="radio-opt" onclick="selectRadio(this)">
+        <input type="radio" name="metodo" value="compra"/>
+        <div>
+          <div class="radio-opt-title">Compro y entrego el regalo a Natali</div>
+          <div class="radio-opt-desc">Tú compras el juguete y se lo llevas directamente</div>
+        </div>
+      </label>
+      <label class="radio-opt" onclick="selectRadio(this)">
+        <input type="radio" name="metodo" value="dinero"/>
+        <div>
+          <div class="radio-opt-title">Entrego dinero en efectivo a Natali</div>
+          <div class="radio-opt-desc">Le das el dinero en efectivo a Natali y ella se encarga de comprar el regalo</div>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="step">3</span> Elige al niño o niña</div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="f-buscar" type="text" placeholder="Buscar por nombre..." oninput="filtrar()"/>
+    </div>
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="setFiltro('todos', this)">Todos</button>
+      <button class="filter-btn" onclick="setFiltro('niña', this)">Niñas</button>
+      <button class="filter-btn" onclick="setFiltro('niño', this)">Niños</button>
+    </div>
+    <div id="loading-msg" class="loading-bar">⏳ Cargando disponibilidad...</div>
+    <div class="nino-list-wrap" id="lista"></div>
+    <div class="tags-wrap" id="tags"></div>
+    <div class="counter" id="counter">0 niños seleccionados</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="step">4</span> Mensaje para el ahijado/ahijada (opcional)</div>
+    <div class="field">
+      <label for="f-comentarios">¿Quieres dejarle un mensaje?</label>
+      <textarea id="f-comentarios" rows="3" style="resize:vertical" placeholder="Escribe algo bonito..."></textarea>
+    </div>
+  </div>
+
+  <button class="btn-primary" id="btn-confirmar" onclick="confirmar()" disabled>Confirmar apadrinamiento →</button>
+</div>
+
+<div class="success-card" id="success">
+  <div class="success-icon">🎁</div>
+  <h2 id="success-titulo">¡Gracias por apadrinar!</h2>
+  <div id="success-ninos" style="margin: 16px 0; text-align: left;"></div>
+  <p>Tu registro fue enviado. Contacta a Natali para coordinar la entrega del regalo.</p>
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWHIg9oDPPyCyfk-mxjsmQR9ms3IJVqMa13O3QeOnA-PzMljluisD_40SuNa_ekQGDzg/exec';
+
+const ninos = [
+  {nombre:"Hernandez Abigail",edad:"6 años",genero:"niña",juguetes:"Pizarron negro / Trastes"},
+  {nombre:"Lopez Hector Enrique",edad:"8 años",genero:"niño",juguetes:"Tablero sensorial silicona / Figura articulada"},
+  {nombre:"Oseguera Arturo",edad:"8 años",genero:"niño",juguetes:"Laberinto magnetico / Carros"},
+  {nombre:"Alvarado Elias",edad:"6 años",genero:"niño",juguetes:"Arena Magica / Plastilina playdoh"},
+  {nombre:"Gomez Mateo",edad:"9 años",genero:"niño",juguetes:"Pop it electronico / Slime"},
+  {nombre:"Romero Said",edad:"6 años",genero:"niño",juguetes:"Juego de palillos chinos / Figura articulada"},
+  {nombre:"Castro Sebastian",edad:"6 años",genero:"niño",juguetes:"Juego de pesca con imanes / Plastilina"},
+  {nombre:"Castro Edith",edad:"6 años",genero:"niña",juguetes:"Juego de combinacion de colores / Trastes"},
+  {nombre:"Sandoval Natalia",edad:"4 años",genero:"niña",juguetes:"Libro con sonidos / Muñeca"},
+  {nombre:"Acosta Anel",edad:"5 años",genero:"niña",juguetes:"Slime / Tablero sensorial silicona"},
+  {nombre:"Rodriguez Bastian",edad:"4 años",genero:"niño",juguetes:"Pelota sensorial / Figura articulada"},
+  {nombre:"Ruiz Israel",edad:"1 año",genero:"niño",juguetes:"Juguete clasificar figuras / Plastilina playdoh"},
+  {nombre:"Piña Abel",edad:"6 años",genero:"niño",juguetes:"Pop it electronico / Figura articulada"},
+  {nombre:"Pacheco Julieta",edad:"5 años",genero:"niña",juguetes:"Juguete de madera con cordones / Juguete de martillo"},
+  {nombre:"Recillas Leonardo",edad:"5 años",genero:"niño",juguetes:"Pelota sensorial / Figura articulada"},
+  {nombre:"Lopez Adrian",edad:"5 años",genero:"niño",juguetes:"Spinner / Tablero sensorial silicona"},
+  {nombre:"Rodriguez Elias",edad:"4 años",genero:"niño",juguetes:"Pop it electronico / Libro con sonidos"},
+  {nombre:"Garduño Nicolas",edad:"7 años",genero:"niño",juguetes:"Laberinto magnetico / Carros"},
+  {nombre:"González Ariadna",edad:"5 años",genero:"niña",juguetes:"Pop it electronico / Muñeca"},
+  {nombre:"Escalona Einar",edad:"3 años",genero:"niño",juguetes:"Juguete magnetico / Figura articulada"},
+  {nombre:"Cruz Barbara",edad:"1 año",genero:"niña",juguetes:"Cubo clasificador figuras / Trastes"},
+  {nombre:"Alvarez Mia",edad:"5 años",genero:"niña",juguetes:"Tablero sensorial silicona / Trastes"},
+  {nombre:"Rodriguez Omar",edad:"3 años",genero:"niño",juguetes:"Juego de pesca con imanes / Figura articulada"},
+  {nombre:"Cosmes Elieen",edad:"1 año",genero:"niño",juguetes:"Juguete de contraccion de erizo / Figura articulada"},
+  {nombre:"Barron Sofia",edad:"5 años",genero:"niña",juguetes:"Juguete magnetico / Juguete martillo"},
+  {nombre:"Solis Emma",edad:"3 años",genero:"niña",juguetes:"Pelota sensorial / Juguete de insercion"},
+  {nombre:"Porfirio Yasser",edad:"6 años",genero:"niño",juguetes:"Juego de pesca con imanes / Pelota sensorial"},
+  {nombre:"Mendoza Evan",edad:"5 años",genero:"niño",juguetes:"Slime / Plastilina"},
+  {nombre:"Almazan Leonardo",edad:"5 años",genero:"niño",juguetes:"Juego de pesca con imanes / Figura articulada"},
+  {nombre:"Yerena Eduardo",edad:"2 años",genero:"niño",juguetes:"Pelota sensorial / Slime"},
+  {nombre:"Garcia Monserrat",edad:"5 años",genero:"niña",juguetes:"Pizarron negro / Trastes"},
+  {nombre:"Vazquez Logan",edad:"2 años",genero:"niño",juguetes:"Juguete martillo / Carros"},
+  {nombre:"Sanchez Angel",edad:"4 años",genero:"niño",juguetes:"Spinner / Juguete de insercion"},
+  {nombre:"Ramirez André",edad:"1 año",genero:"niño",juguetes:"Juguete martillo / Carros"},
+  {nombre:"Hernandez Eduardo",edad:"2 años",genero:"niño",juguetes:"Pop it / Juguete de clasificacion de colores"},
+  {nombre:"Gonzalez Elian",edad:"3 años",genero:"niño",juguetes:"Pizarron negro / Slime"},
+  {nombre:"Ortiz Cristopher",edad:"1 año",genero:"niño",juguetes:"Rompecabezas de madera / Carros"},
+  {nombre:"Fernandez Santiago",edad:"1 año",genero:"niño",juguetes:"Juguete de contraccion de erizo / Figura articulada"},
+  {nombre:"Covarrubias Nina",edad:"1 año",genero:"niña",juguetes:"Cubo clasificador figuras / Muñeca"},
+  {nombre:"Hernandez Mia",edad:"4 años",genero:"niña",juguetes:"Juguete magnetico / Slime"},
+  {nombre:"Tejeda Angel",edad:"4 años",genero:"niño",juguetes:"Juguete magnetico / Carros"},
+  {nombre:"Candelario Ismael",edad:"4 años",genero:"niño",juguetes:"Juguete martillo / Slime"},
+  {nombre:"Biasana Bruno",edad:"4 años",genero:"niño",juguetes:"Juego de pesca con imanes / Plastilina"},
+  {nombre:"Montiel Mateo",edad:"2 años",genero:"niño",juguetes:"Spinner / Juguete de insercion"},
+  {nombre:"Castro Melisa",edad:"1 año",genero:"niña",juguetes:"Cubo clasificador figuras / Trastes"},
+  {nombre:"Diaz Rodrigo",edad:"< 1 año",genero:"niño",juguetes:"Pop up pals / Carros"},
+  {nombre:"Puebla Angel",edad:"4 años",genero:"niño",juguetes:"Juego de pesca con imanes / Figura articulada"},
+  {nombre:"Dominguez Luciana",edad:"< 1 año",genero:"niña",juguetes:"Pop up pals / Muñeca"},
+  {nombre:"Cervantes Omar",edad:"4 años",genero:"niño",juguetes:"Pelota sensorial / Slime"},
+  {nombre:"Escobar Sebastian",edad:"5 años",genero:"niño",juguetes:"Juego de palillos chinos / Figura articulada"},
+  {nombre:"Garcia Natali",edad:"1 año",genero:"niña",juguetes:"Juguete de contraccion de erizo / Muñeca"},
+  {nombre:"Hernandez Grecia",edad:"5 años",genero:"niña",juguetes:"Juego de palillos chinos / Trastes"},
+  {nombre:"Ocejo Javier",edad:"< 1 año",genero:"niño",juguetes:"Pop up pals / Carros"},
+  {nombre:"Oseguera Leonel",edad:"5 años",genero:"niño",juguetes:"Tablero sensorial silicona / Carros"},
+  {nombre:"Mendoza Fernando",edad:"1 año",genero:"niño",juguetes:"Cubo clasificador figuras / Pop it"},
+  {nombre:"Alejo Karime",edad:"7 años",genero:"niña",juguetes:"Juego de palillos chinos / Trastes"},
+  {nombre:"Alejo Mayrin",edad:"7 años",genero:"niña",juguetes:"Juego de pesca con imanes / Muñeca"},
+  {nombre:"Barron Jireh",edad:"1 año",genero:"niña",juguetes:"Juguete de contraccion de erizo"},
+  {nombre:"Juarez Altair",edad:"3 años",genero:"niño",juguetes:"Juguete de insercion / Figura articulada"},
+  {nombre:"Valtierra Mateo",edad:"3 años",genero:"niño",juguetes:"Pelota sensorial / Tablero sensorial silicona"},
+  {nombre:"Pérez Regina",edad:"1 año",genero:"niña",juguetes:"Juguete de clasificacion de colores / Legos"},
+  {nombre:"Urbina Amairani",edad:"10 años",genero:"niña",juguetes:"Tablero sensorial silicona / Pop it"},
+  {nombre:"Corona Eithan",edad:"3 años",genero:"niño",juguetes:"Tablero sensorial silicona / Carros"},
+  {nombre:"Villar Bruno",edad:"4 años",genero:"niño",juguetes:"Juguete magnetico / Figura articulada"},
+  {nombre:"Barco Gabriel",edad:"2 años",genero:"niño",juguetes:"Juguete martillo / Pelota sensorial"},
+  {nombre:"Perez Mathias",edad:"4 años",genero:"niño",juguetes:"Juego de pesca con imanes / Carros"},
+  {nombre:"Ocampo Cielo",edad:"2 años",genero:"niña",juguetes:"Juguete magnetico / Trastes"},
+  {nombre:"Garcia Camila",edad:"4 años",genero:"niña",juguetes:"Juego de palillos chinos / Muñeca"},
+  {nombre:"Esquivel Angel",edad:"7 años",genero:"niño",juguetes:"Juguete de madera con cordones / Pelota sensorial"},
+  {nombre:"Flores Ferdinand",edad:"10 años",genero:"niña",juguetes:"Tablero sensorial silicona / Slime"},
+  {nombre:"Lopez Ian",edad:"5 años",genero:"niño",juguetes:"Tablero sensorial silicona / Carros"},
+  {nombre:"Casas Diego",edad:"3 años",genero:"niño",juguetes:"Juguete de insercion / Figura articulada"},
+  {nombre:"Gurdiño Javier Andres",edad:"3 años",genero:"niño",juguetes:"Pizarron negro / Slime"},
+  {nombre:"Maldonado America",edad:"8 años",genero:"niña",juguetes:"Laberinto magnetico / Pelota sensorial"},
+  {nombre:"Martinez Maite",edad:"6 años",genero:"niña",juguetes:"Spinner / Juguete de insercion"},
+  {nombre:"Ayvar Romina",edad:"5 años",genero:"niña",juguetes:"Libro con sonidos / Muñeca"},
+  {nombre:"Cuevas Aurora",edad:"1 año",genero:"niña",juguetes:"Pelota sensorial / Slime"},
+  {nombre:"Silvia Leonardo",edad:"1 año",genero:"niña",juguetes:"Rompecabezas de madera / Carros"},
+  {nombre:"Romero Liam Arturo",edad:"2 años",genero:"niño",juguetes:"Juguete martillo / Pelota sensorial"},
+  {nombre:"Serrano Pablo",edad:"1 año",genero:"niño",juguetes:"Pop up pals / Carros"}
+];
+
+let seleccionados = [];
+let filtroGenero = 'todos';
+const INICIALES = [
+  "Acosta Anel","Alejo Karime","Alvarado Elias","Ayvar Romina",
+  "Barco Gabriel","Barron Jireh","Barron Sofia","Biasana Bruno",
+  "Castro Edith","Castro Melisa","Cosmes Elieen","Covarrubias Nina",
+  "Cruz Barbara","Cuevas Aurora","Dominguez Luciana","Escalona Einar",
+  "Escobar Sebastian","Garcia Camila","Garcia Monserrat","Garcia Natali",
+  "Garduño Nicolas","Gomez Mateo","González Ariadna","Hernandez Abigail",
+  "Hernandez Grecia","Hernandez Mia","Lopez Adrian","Lopez Hector Enrique",
+  "Mendoza Evan","Mendoza Fernando","Ocampo Cielo","Ortiz Cristopher",
+  "Oseguera Arturo","Pacheco Julieta","Perez Mathias","Puebla Angel",
+  "Rodriguez Bastian","Rodriguez Elias","Ruiz Israel","Sandoval Natalia",
+  "Silvia Leonardo","Solis Emma","Urbina Amairani"
+]
+  document.getElementById('loading-msg').style.display = 'none';
+  document.getElementById('btn-confirmar').disabled = false;
+  renderLista();
+  const callbackName = 'cb_' + Date.now();
+  window[callbackName] = function(data) {
+    const fromSheet = data.apadrinados || [];
+    const nuevos = fromSheet.filter(n => !apadrinados.includes(n));
+    if (nuevos.length > 0) { apadrinados = [...apadrinados, ...nuevos]; renderLista(); }
+    delete window[callbackName];
+    document.getElementById('jsonp-script').remove();
+  };
+  const script = document.createElement('script');
+  script.id = 'jsonp-script';
+  script.src = SCRIPT_URL + '?callback=' + callbackName + '&t=' + Date.now();
+  document.body.appendChild(script);
+}
+
+function renderLista() {
+  const buscar = document.getElementById('f-buscar').value.toLowerCase();
+  const lista = document.getElementById('lista');
+  lista.innerHTML = '';
+  ninos.forEach((n, i) => {
+    if (filtroGenero !== 'todos' && n.genero !== filtroGenero) return;
+    if (buscar && !n.nombre.toLowerCase().includes(buscar)) return;
+    const sel = seleccionados.includes(i);
+    const ap = apadrinados.includes(n.nombre);
+    const div = document.createElement('div');
+    div.className = 'nino-item' + (sel ? ' selected' : '') + (ap ? ' apadrinado' : '');
+    if (!ap) div.onclick = () => toggleNino(i);
+    div.innerHTML = `
+      <input type="checkbox" ${sel ? 'checked' : ''} ${ap ? 'disabled' : ''} onclick="event.stopPropagation();event.preventDefault();toggleNino(${i})"/>
+      <div class="nino-avatar ${n.genero==='niña'?'av-girl':'av-boy'}">${initials(n.nombre)}</div>
+      <div class="nino-info">
+        <div class="nino-name">${n.nombre}</div>
+        <div class="nino-meta">${n.genero.charAt(0).toUpperCase()+n.genero.slice(1)} · ${n.edad}</div>
+        <div class="nino-toys">${n.juguetes}</div>
+      </div>
+      ${ap ? '<span class="nino-badge">✓ Apadrinado</span>' : ''}
+    `;
+    lista.appendChild(div);
+  });
+}
+
+function renderTags() {
+  const tags = document.getElementById('tags');
+  const counter = document.getElementById('counter');
+  tags.innerHTML = '';
+  seleccionados.forEach(i => {
+    const span = document.createElement('span');
+    span.className = 'tag';
+    span.innerHTML = `${ninos[i].nombre} <span class="tag-remove" onclick="toggleNino(${i})">×</span>`;
+    tags.appendChild(span);
+  });
+  const n = seleccionados.length;
+  counter.textContent = `${n} niño${n!==1?'s':''} seleccionado${n!==1?'s':''}`;
+}
+
+function toggleNino(i) {
+  if (apadrinados.includes(ninos[i].nombre)) return;
+  const idx = seleccionados.indexOf(i);
+  if (idx === -1) seleccionados.push(i);
+  else seleccionados.splice(idx, 1);
+  renderLista();
+  renderTags();
+}
+
+function filtrar() { renderLista(); }
+
+function setFiltro(genero, btn) {
+  filtroGenero = genero;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLista();
+}
+
+function selectRadio(label) {
+  document.querySelectorAll('.radio-opt').forEach(l => l.classList.remove('selected'));
+  label.classList.add('selected');
+}
+
+async function confirmar() {
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const metodoEl = document.querySelector('input[name=metodo]:checked');
+  const mensaje = document.getElementById('f-comentarios').value.trim();
+
+  if (!nombre) { alert('Por favor escribe tu nombre.'); return; }
+  const telefono = document.getElementById('f-telefono').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  if (!telefono) { alert('Por favor escribe tu número de contacto.'); return; }
+  if (!email) { alert('Por favor escribe tu correo electrónico.'); return; }
+  if (!metodoEl) { alert('Por favor elige cómo quieres participar.'); return; }
+  if (seleccionados.length === 0) { alert('Por favor elige al menos un niño o niña.'); return; }
+
+  const metodo = metodoEl.value === 'compra' ? 'Compro y entrego el regalo' : 'Entrego dinero en efectivo';
+  const ninosSeleccionados = seleccionados.map(i => ninos[i].nombre);
+
+  const btn = document.getElementById('btn-confirmar');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  try {
+    // Guardar en Google Sheets
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ padrino: nombre, metodo, ninos: ninosSeleccionados, mensaje })
+    });
+
+    // Guardar en Netlify Forms
+    const formData = new FormData();
+    formData.append('form-name', 'apadrinamiento');
+    formData.append('nombre', nombre);
+    formData.append('telefono', telefono);
+    formData.append('email', email);
+    formData.append('metodo', metodo);
+    formData.append('ninos', ninosSeleccionados.join(', '));
+    formData.append('mensaje', mensaje);
+    await fetch('/', { method: 'POST', body: formData });
+
+    document.getElementById('main-form').style.display = 'none';
+    document.getElementById('success-titulo').textContent = '¡Gracias ' + nombre + '!';
+    const lista = ninosSeleccionados.map(n => {
+      const info = ninos.find(x => x.nombre === n);
+      return `<div style="padding:10px 0; border-bottom:1px solid #c8e6c9;">
+        <strong>${n}</strong><br/>
+        <span style="font-size:0.85rem;color:#4a7a4a;">🎁 ${info ? info.juguetes : ''}</span>
+      </div>`;
+    }).join('');
+    document.getElementById('success-ninos').innerHTML = lista;
+    document.getElementById('success').classList.add('visible');
+  } catch(err) {
+    alert('Error al guardar. Intenta de nuevo.');
+    btn.disabled = false;
+    btn.textContent = 'Confirmar apadrinamiento →';
+  }
+}
+
+cargarApadrinados();
+</script>
+</body>
+</html>
