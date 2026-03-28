@@ -79,29 +79,44 @@
   </style>
 </head>
 <body>
+
 <nav>
   <div class="nav-brand">CONFE <span>·</span> Regalos</div>
   <span class="nav-tab">Apadrinar</span>
 </nav>
+
 <form name="apadrinamiento" netlify netlify-honeypot="bot-field" hidden>
   <input type="text" name="nombre"/>
+  <input type="text" name="telefono"/>
+  <input type="email" name="email"/>
   <input type="text" name="metodo"/>
   <input type="text" name="ninos"/>
   <textarea name="mensaje"></textarea>
 </form>
+
 <div class="hero">
   <span class="hero-tag">CONFE 2026</span>
   <h1>Regala una sonrisa<br/><em>este año</em></h1>
   <p>Elige al niño o niña que quieres apadrinar y coordina el regalo con Natali. Cada presente hace la diferencia.</p>
 </div>
+
 <div class="main" id="main-form">
   <div class="card">
-    <div class="card-title"><span class="step">1</span> Tu nombre</div>
-    <div class="field">
-      <label for="f-nombre">Nombre completo</label>
+    <div class="card-title"><span class="step">1</span> Tus datos</div>
+    <div class="field" style="margin-bottom:12px">
+      <label for="f-nombre">Nombre completo *</label>
       <input id="f-nombre" type="text" placeholder="Nombre completo"/>
     </div>
+    <div class="field" style="margin-bottom:12px">
+      <label for="f-telefono">Número de contacto *</label>
+      <input id="f-telefono" type="tel" placeholder="Ej. 55 1234 5678"/>
+    </div>
+    <div class="field">
+      <label for="f-email">Correo electrónico *</label>
+      <input id="f-email" type="email" placeholder="tucorreo@email.com"/>
+    </div>
   </div>
+
   <div class="card">
     <div class="card-title"><span class="step">2</span> ¿Cómo quieres participar?</div>
     <div class="radio-opts">
@@ -121,6 +136,7 @@
       </label>
     </div>
   </div>
+
   <div class="card">
     <div class="card-title"><span class="step">3</span> Elige al niño o niña</div>
     <div class="search-wrap">
@@ -137,6 +153,7 @@
     <div class="tags-wrap" id="tags"></div>
     <div class="counter" id="counter">0 niños seleccionados</div>
   </div>
+
   <div class="card">
     <div class="card-title"><span class="step">4</span> Mensaje para el ahijado/ahijada (opcional)</div>
     <div class="field">
@@ -144,16 +161,20 @@
       <textarea id="f-comentarios" rows="3" style="resize:vertical" placeholder="Escribe algo bonito..."></textarea>
     </div>
   </div>
+
   <button class="btn-primary" id="btn-confirmar" onclick="confirmar()" disabled>Confirmar apadrinamiento →</button>
 </div>
+
 <div class="success-card" id="success">
   <div class="success-icon">🎁</div>
   <h2 id="success-titulo">¡Gracias por apadrinar!</h2>
-<div id="success-ninos" style="margin: 16px 0; text-align: left;"></div>
-<p>Tu registro fue enviado.
+  <div id="success-ninos" style="margin: 16px 0; text-align: left;"></div>
+  <p>Tu registro fue enviado. Contacta a Natali para coordinar la entrega del regalo.</p>
 </div>
+
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWHIg9oDPPyCyfk-mxjsmQR9ms3IJVqMa13O3QeOnA-PzMljluisD_40SuNa_ekQGDzg/exec';
+
 const ninos = [
   {nombre:"Hernandez Abigail",edad:"6 años",genero:"niña",juguetes:"Pizarron negro / Trastes"},
   {nombre:"Lopez Hector Enrique",edad:"8 años",genero:"niño",juguetes:"Tablero sensorial silicona / Figura articulada"},
@@ -236,25 +257,25 @@ const ninos = [
   {nombre:"Romero Liam Arturo",edad:"2 años",genero:"niño",juguetes:"Juguete martillo / Pelota sensorial"},
   {nombre:"Serrano Pablo",edad:"1 año",genero:"niño",juguetes:"Pop up pals / Carros"}
 ];
+
 let seleccionados = [];
 let filtroGenero = 'todos';
-let apadrinados = [];
 const INICIALES = [
   "Acosta Anel","Alejo Karime","Alvarado Elias","Ayvar Romina",
   "Barco Gabriel","Barron Jireh","Barron Sofia","Biasana Bruno",
   "Castro Edith","Castro Melisa","Cosmes Elieen","Covarrubias Nina",
   "Cruz Barbara","Cuevas Aurora","Dominguez Luciana","Escalona Einar",
   "Escobar Sebastian","Garcia Camila","Garcia Monserrat","Garcia Natali",
-  "Garduño Nicolas","González Ariadna","Hernandez Abigail","Hernandez Grecia",
-  "Hernandez Mia","Lopez Adrian","Lopez Hector Enrique","Mendoza Evan",
-  "Mendoza Fernando","Ocampo Cielo","Ortiz Cristopher","Oseguera Arturo",
-  "Pacheco Julieta","Perez Mathias","Puebla Angel","Rodriguez Bastian",
+  "González Ariadna","Hernandez Abigail","Hernandez Grecia","Hernandez Mia",
+  "Lopez Adrian","Lopez Hector Enrique","Mendoza Fernando","Ocampo Cielo",
+  "Ortiz Cristopher","Oseguera Arturo","Pacheco Julieta","Rodriguez Bastian",
   "Rodriguez Elias","Ruiz Israel","Sandoval Natalia","Silvia Leonardo"
 ];
-];
+
 function initials(nombre) {
   return nombre.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
 }
+
 function cargarApadrinados() {
   apadrinados = [...INICIALES];
   document.getElementById('loading-msg').style.display = 'none';
@@ -273,6 +294,7 @@ function cargarApadrinados() {
   script.src = SCRIPT_URL + '?callback=' + callbackName + '&t=' + Date.now();
   document.body.appendChild(script);
 }
+
 function renderLista() {
   const buscar = document.getElementById('f-buscar').value.toLowerCase();
   const lista = document.getElementById('lista');
@@ -298,6 +320,7 @@ function renderLista() {
     lista.appendChild(div);
   });
 }
+
 function renderTags() {
   const tags = document.getElementById('tags');
   const counter = document.getElementById('counter');
@@ -311,6 +334,7 @@ function renderTags() {
   const n = seleccionados.length;
   counter.textContent = `${n} niño${n!==1?'s':''} seleccionado${n!==1?'s':''}`;
 }
+
 function toggleNino(i) {
   if (apadrinados.includes(ninos[i].nombre)) return;
   const idx = seleccionados.indexOf(i);
@@ -319,57 +343,79 @@ function toggleNino(i) {
   renderLista();
   renderTags();
 }
+
 function filtrar() { renderLista(); }
+
 function setFiltro(genero, btn) {
   filtroGenero = genero;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderLista();
 }
+
 function selectRadio(label) {
   document.querySelectorAll('.radio-opt').forEach(l => l.classList.remove('selected'));
   label.classList.add('selected');
 }
+
 async function confirmar() {
   const nombre = document.getElementById('f-nombre').value.trim();
   const metodoEl = document.querySelector('input[name=metodo]:checked');
   const mensaje = document.getElementById('f-comentarios').value.trim();
+
   if (!nombre) { alert('Por favor escribe tu nombre.'); return; }
+  const telefono = document.getElementById('f-telefono').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  if (!telefono) { alert('Por favor escribe tu número de contacto.'); return; }
+  if (!email) { alert('Por favor escribe tu correo electrónico.'); return; }
   if (!metodoEl) { alert('Por favor elige cómo quieres participar.'); return; }
   if (seleccionados.length === 0) { alert('Por favor elige al menos un niño o niña.'); return; }
+
   const metodo = metodoEl.value === 'compra' ? 'Compro y entrego el regalo' : 'Entrego dinero en efectivo';
   const ninosSeleccionados = seleccionados.map(i => ninos[i].nombre);
+
   const btn = document.getElementById('btn-confirmar');
   btn.disabled = true;
   btn.textContent = 'Enviando...';
+
   try {
+    // Guardar en Google Sheets
     await fetch(SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ padrino: nombre, metodo, ninos: ninosSeleccionados, mensaje })
     });
+
+    // Guardar en Netlify Forms
     const formData = new FormData();
     formData.append('form-name', 'apadrinamiento');
     formData.append('nombre', nombre);
+    formData.append('telefono', telefono);
+    formData.append('email', email);
     formData.append('metodo', metodo);
     formData.append('ninos', ninosSeleccionados.join(', '));
     formData.append('mensaje', mensaje);
     await fetch('/', { method: 'POST', body: formData });
+
     document.getElementById('main-form').style.display = 'none';
-document.getElementById('success-titulo').textContent = '¡Gracias ' + nombre + '!';
-const lista = ninosSeleccionados.map(n => {
-  const info = ninos.find(x => x.nombre === n);
-  return '<div style="padding:10px 0; border-bottom:1px solid #c8e6c9;"><strong>' + n + '</strong><br/><span style="font-size:0.85rem;color:#4a7a4a;">🎁 ' + (info ? info.juguetes : '') + '</span></div>';
-}).join('');
-document.getElementById('success-ninos').innerHTML = lista;
-document.getElementById('success').classList.add('visible');
+    document.getElementById('success-titulo').textContent = '¡Gracias ' + nombre + '!';
+    const lista = ninosSeleccionados.map(n => {
+      const info = ninos.find(x => x.nombre === n);
+      return `<div style="padding:10px 0; border-bottom:1px solid #c8e6c9;">
+        <strong>${n}</strong><br/>
+        <span style="font-size:0.85rem;color:#4a7a4a;">🎁 ${info ? info.juguetes : ''}</span>
+      </div>`;
+    }).join('');
+    document.getElementById('success-ninos').innerHTML = lista;
+    document.getElementById('success').classList.add('visible');
   } catch(err) {
     alert('Error al guardar. Intenta de nuevo.');
     btn.disabled = false;
     btn.textContent = 'Confirmar apadrinamiento →';
   }
 }
+
 cargarApadrinados();
 </script>
 </body>
