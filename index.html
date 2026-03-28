@@ -271,7 +271,7 @@ const INICIALES = [
   "Mendoza Evan","Mendoza Fernando","Ocampo Cielo","Ortiz Cristopher",
   "Oseguera Arturo","Pacheco Julieta","Pérez Regina","Perez Mathias","Puebla Angel",
   "Rodriguez Bastian","Rodriguez Elias","Ruiz Israel","Sandoval Natalia",
- "Silvia Leonardo","Solis Emma","Urbina Amairani","Pérez Regina","Romero Said","Castro Sebastian","Gonzalez Elian"
+ "Silvia Leonardo","Solis Emma","Urbina Amairani","Pérez Regina","Romero Said","Castro Sebastian","Gonzalez Elian","Yerena Eduardo"
 ];
 function initials(nombre) {
   return nombre.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
@@ -301,7 +301,9 @@ function renderLista() {
   const buscar = document.getElementById('f-buscar').value.toLowerCase();
   const lista = document.getElementById('lista');
   lista.innerHTML = '';
-  ninos.forEach((n, i) => {
+ const ninosOrdenados = ninos.map((n,i) => ({...n,idx:i})).sort((a,b) => apadrinados.includes(a.nombre) - apadrinados.includes(b.nombre));
+ninosOrdenados.forEach((n) => { const i = n.idx;
+ninosOrdenados.forEach((n) => { const i = n.idx;
     if (filtroGenero !== 'todos' && n.genero !== filtroGenero) return;
     if (buscar && !n.nombre.toLowerCase().includes(buscar)) return;
     const sel = seleccionados.includes(i);
@@ -318,8 +320,9 @@ function renderLista() {
         <div class="nino-toys">${n.juguetes}</div>
       </div>
       ${ap ? '<span class="nino-badge">✓ Apadrinado</span>' : ''}
-    `;
-    lista.appendChild(div);
+    `lista.appendChild(div);
+  });
+    lista.appendChild(div);}
   });
 }
 
