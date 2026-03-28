@@ -275,6 +275,7 @@ const INICIALES = [
 let apadrinados = [];
 function cargarApadrinados() {
   apadrinados = [...INICIALES];
+  document.getElementById('loading-msg').style.display = 'none';
   document.getElementById('btn-confirmar').disabled = false;
   renderLista();
   const callbackName = 'cb_' + Date.now();
