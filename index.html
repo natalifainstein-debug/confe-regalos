@@ -301,8 +301,7 @@ function renderLista() {
   const buscar = document.getElementById('f-buscar').value.toLowerCase();
   const lista = document.getElementById('lista');
   lista.innerHTML = '';
- const ninosOrdenados = ninos.map((n,i) => ({...n,idx:i})).sort((a,b) => apadrinados.includes(a.nombre) - apadrinados.includes(b.nombre)); ninosOrdenados.forEach((n) => { const i = n.idx;
-
+ ninos.forEach((n, i) => {
     if (filtroGenero !== 'todos' && n.genero !== filtroGenero) return;
     if (buscar && !n.nombre.toLowerCase().includes(buscar)) return;
     const sel = seleccionados.includes(i);
