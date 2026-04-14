@@ -257,7 +257,7 @@ const INICIALES = [
   "Barco Gabriel","Barron Jireh","Barron Sofia","Biasana Bruno",
   "Castro Edith","Castro Melisa","Castro Sebastian","Cosmes Elieen","Covarrubias Nina",
   "Cruz Barbara","Cuevas Aurora","Dominguez Luciana","Escalona Einar",
-  "Escobar Sebastian","Garcia Camila","Garcia Monserrat","Garcia Natali",
+  "Escobar Sebastian","Garcia Camila","Garcia  Camila","Garcia Monserrat","Garcia Natali",
   "Garduño Nicolas","Gomez Mateo","Gonzalez Elian","González Ariadna",
   "Hernandez Abigail","Hernandez Grecia","Hernandez Mia","Lopez Adrian",
   "Lopez Hector Enrique","Mendoza Evan","Mendoza Fernando","Ocampo Cielo",
@@ -266,9 +266,11 @@ const INICIALES = [
   "Romero Said","Ruiz Israel","Sandoval Natalia","Silvia Leonardo",
   "Solis Emma","Urbina Amairani","Yerena Eduardo",
   "Vazquez Logan","Ramirez André","Tejeda Angel","Diaz Rodrigo",
-  "Ocejo Javier","Oseguera Leonel","Corona Eithan","Lopez Ian","Serrano Pablo",
+  "Ocejo Javier","Oseguera Leonel","Corona Eithan","Corona  Eithan","Lopez Ian","Serrano Pablo",
   "Alejo Mayrin","Alvarez Mia","Recillas Leonardo",
-  "Casas Diego","Cervantes Omar","Martinez Maite","Montiel Mateo","Sanchez Angel"
+  "Casas Diego","Cervantes Omar","Martinez Maite","Montiel Mateo","Sanchez Angel",
+  "Porfirio Yasser","Rodriguez Omar",
+  "Almazan Leonardo","Esquivel Angel"
 ];
 
 function initials(nombre) {
@@ -276,7 +278,7 @@ function initials(nombre) {
 }
 
 function normalizar(nombre) {
-  return nombre.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  return nombre.trim().replace(/\s+/g, " ").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 function cargarApadrinados() {
